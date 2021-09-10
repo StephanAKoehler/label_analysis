@@ -433,9 +433,15 @@ class labelings():
         else:
             return ' '.join( string_split )        
     
-    def standardize_company(self, string = 'Exxonmobil corporation', fuzzy_threshold = None, return_list = True ):
-        return self.standardize( string, dictionaries = ['compass directions', 'cardinals', 'ordinals', 'business suffix', 'states'], 
+    def standardize_company(self, string = 'Exxonmobil co llc', fuzzy_threshold = None, return_list = True, return_suffix = True ):
+        tmp = self.standardize( string, dictionaries = ['compass directions', 'cardinals', 'ordinals', 'business suffix', 'states'], 
             fuzzy_threshold = fuzzy_threshold, return_list = return_list )
+        suffix = []
+        while tmp[-1].lower() in self.dictionary['business suffix'].values():
+            suffix.append( tmp.pop() )
+        if return_suffix:
+            return tmp, suffix[::-1]
+        return tmp
 
     def standardize_address(self, string = 'Exxonmobil corporation', fuzzy_threshold = None, return_list = True ):
         return self.standardize( string, dictionaries = ['compass directions', 'cardinals', 'ordinals', 'postal suffix', 'states'], 
